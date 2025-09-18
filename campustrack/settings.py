@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-CHANGE_THIS_TO_A_STRONG_SECRET'
 DEBUG = True
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = ['*']
 import os
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
