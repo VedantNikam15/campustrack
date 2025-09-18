@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-CHANGE_THIS_TO_A_STRONG_SECRET'
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [ '*' ]
 import os
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -30,8 +30,14 @@ MIDDLEWARE = [
 ]
 
 import dj_database_url
+import os
+
 DATABASES = {
- 'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': dj_database_url.config(
+        default="postgresql://auth_user_bjqn_user:AYAdsp5FaaD1Im95qdctOLQKr06oiNPH@dpg-d35s1ifdiees738j3vgg-a/auth_user_bjqn",
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 
