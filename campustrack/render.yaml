@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: campustrack
+    env: python
+    buildCommand: "./manage.py migrate"
+    startCommand: "gunicorn campustrack.wsgi"
