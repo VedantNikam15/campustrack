@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <!-- Main Dashboard -->
+  <div class="col-lg-8">
+    <h2 class="fw-bold text-gradient mb-4">📊 Student Dashboard</h2>
+
+    <!-- Skills Section -->
+    <section class="mb-5">
+      <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+        <h4 class="fw-semibold text-success">💡 Skills</h4>
+        <a class="btn btn-sm btn-success shadow-sm px-3" href="{% url 'skill_create' %}">+ Add</a>
+      </div>
+      <div class="row">
+        {% for skill in skills %}
+          <div class="col-md-6 mb-3">
+            <div class="card shadow-sm border-0 h-100 hover-card">
+              <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-1 fw-bold">{{ skill.name }}</h6>
+                  <span class="badge bg-gradient bg-info text-dark px-2">{{ skill.level }}</span>
+                </div>
+                <div class="btn-group">
+                  <a href="{{ skill.get_update_url }}" class="btn btn-sm btn-outline-secondary" title="Edit">✏️</a>
+                  <a href="{{ skill.get_delete_url }}" class="btn btn-sm btn-outline-danger" title="Delete">🗑️</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="text-muted fst-italic">No skills added yet.</p>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="mb-5">
+      <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+        <h4 class="fw-semibold text-warning">🏆 Achievements</h4>
+        <a class="btn btn-sm btn-warning shadow-sm px-3" href="{% url 'achievement_create' %}">+ Add</a>
+      </div>
+      {% for a in achievements %}
+        <div class="card shadow-sm border-0 mb-3 hover-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5 class="fw-bold text-dark mb-1">{{ a.title }}</h5>
+                <small class="text-muted">{{ a.date }}</small>
+                <p class="mt-2 mb-2">{{ a.description|truncatechars:150 }}</p>
+                {% if a.proof_link %}
+                  <a href="{{ a.proof_link }}" target="_blank" class="btn btn-sm btn-outline-info">🔗 Proof</a>
+                {% endif %}
+              </div>
+              <div class="btn-group">
+                <a href="{{ a.get_update_url }}" class="btn btn-sm btn-outline-secondary" title="Edit">✏️</a>
+                <a href="{{ a.get_delete_url }}" class="btn btn-sm btn-outline-danger" title="Delete">🗑️</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted fst-italic">No achievements added yet.</p>
+      {% endfor %}
+    </section>
+
+    <!-- Certificates Section -->
+    <section>
+      <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+        <h4 class="fw-semibold text-primary">📜 Certificates</h4>
+        <a class="btn btn-sm btn-primary shadow-sm px-3" href="{% url 'certificate_create' %}">+ Add</a>
+      </div>
+      {% for c in certificates %}
+        <div class="card shadow-sm border-0 mb-3 hover-card">
+          <div class="card-body d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="fw-bold text-dark mb-1">{{ c.title }}</h6>
+              <small class="text-muted">{{ c.issuer }} | {{ c.issue_date }}</small>
+              <div class="mt-2">
+                {% if c.link %}
+                  <a href="{{ c.link }}" target="_blank" class="btn btn-sm btn-outline-info me-1">🔗 View</a>
+                {% endif %}
+                {% if c.file %}
+                  <a href="{{ c.file.url }}" target="_blank" class="btn btn-sm btn-outline-success">⬇️ Download</a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="btn-group">
+              <a href="{{ c.get_update_url }}" class="btn btn-sm btn-outline-secondary" title="Edit">✏️</a>
+              <a href="{{ c.get_delete_url }}" class="btn btn-sm btn-outline-danger" title="Delete">🗑️</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted fst-italic">No certificates uploaded yet.</p>
+      {% endfor %}
+    </section>
+  </div>
+
+  <!-- Profile Sidebar -->
+  <div class="col-lg-4">
+    <div class="card shadow-lg border-0 sticky-top profile-card gradient-border" style="top: 80px;">
+      <div class="card-body text-center">
+        {% if profile.avatar %}
+          <img src="{{ profile.avatar.url }}" class="rounded-circle mb-3 shadow-sm border border-3 border-primary" width="120" height="120" alt="avatar">
+        {% else %}
+          <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm" style="width:120px; height:120px;">
+            <span class="fs-1">👤</span>
+          </div>
+        {% endif %}
+        <h5 class="fw-bold text-dark">{{ profile.user.username }}</h5>
+        <p class="text-muted small mb-1">{{ profile.college }}</p>
+        <p class="mb-2">{{ profile.bio|linebreaksbr }}</p>
+        <a class="btn btn-sm btn-outline-primary w-100 shadow-sm" href="{% url 'profile_update' %}">✏️ Edit Profile</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
