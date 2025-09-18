@@ -8,16 +8,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-CHANGE_THIS_TO_A_STRONG_SE
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "campustrack.onrender.com",   # your Render domain
-]
+ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://*.onrender.com",   # trust all Render subdomains
     "http://localhost",
     "http://127.0.0.1",
-    "https://campustrack.onrender.com",   # Render domain
 ]
 
 # ----------------- Static & Media -----------------
