@@ -1,15 +1,25 @@
-<<<<<<< HEAD
-services:
-  - type: web
-    name: campustrack
-    env: python
-    buildCommand: "./manage.py migrate"
-    startCommand: "gunicorn campustrack.wsgi"
-=======
-services:
-  - type: web
-    name: campustrack
-    env: python
-    buildCommand: "./manage.py migrate"
-    startCommand: "gunicorn campustrack.wsgi"
+databases:
+  - name: campustrack-db
+    databaseName: campustrack
+    user: campustrack_user
+    plan: free
 
+services:
+  - type: web
+    name: campustrack
+    env: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn campustrack.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: campustrack-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
