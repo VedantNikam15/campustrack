@@ -4,39 +4,32 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-CHANGE_THIS_TO_A_STRONG_SECRET'
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-CHANGE_THIS_TO_A_STRONG_SECRET")
 
-DEBUG = True  # change to False on production!
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
-# Hosts allowed
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "campustrack.onrender.com",   # your Render domain
 ]
 
-# CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     "http://127.0.0.1",
     "https://campustrack.onrender.com",   # Render domain
 ]
 
-# Static files
-
-DEBUG = True
-ALLOWED_HOSTS = [ '*' ]
-import os
-
+# ----------------- Static & Media -----------------
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ----------------- Installed Apps -----------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,9 +43,10 @@ INSTALLED_APPS = [
     'students.apps.StudentsConfig',
 ]
 
+# ----------------- Middleware -----------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',   # for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,25 +55,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-import dj_database_url
-import os
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default="postgresql://auth_user_bjqn_user:AYAdsp5FaaD1Im95qdctOLQKr06oiNPH@dpg-d35s1ifdiees738j3vgg-a/auth_user_bjqn",
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
-
-
-
 ROOT_URLCONF = 'campustrack.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],   # custom templates folder
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,16 +75,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'campustrack.wsgi.application'
 
-# Database: SQLite for local, Postgres on Render
-if os.getenv("DATABASE_URL"):  # Render provides DATABASE_URL
+# ----------------- Database -----------------
+if os.getenv("DATABASE_URL"):  # Render will set this automatically
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.environ["DATABASE_URL"],
             conn_max_age=600,
             ssl_require=True
         )
     }
-else:  # fallback for local dev
+else:  # fallback for local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -111,7 +91,7 @@ else:  # fallback for local dev
         }
     }
 
-# Password validation
+# ----------------- Password Validation -----------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -119,6 +99,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# ----------------- Internationalization -----------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -126,7 +107,7 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Authentication redirects
+# ----------------- Authentication -----------------
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
