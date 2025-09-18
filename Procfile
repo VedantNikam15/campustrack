@@ -1,1 +1,1 @@
-web: gunicorn campustrack.wsgi:application --log-file –
+web: gunicorn campustrack.wsgi:application --bind 0.0.0.0:$PORT
