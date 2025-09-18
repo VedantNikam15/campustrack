@@ -5,6 +5,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-CHANGE_THIS_TO_A_STRONG_SECRET'
+
 DEBUG = True  # change to False on production!
 
 # Hosts allowed
@@ -22,6 +23,11 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Static files
+
+DEBUG = True
+ALLOWED_HOSTS = [ '*' ]
+import os
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -54,6 +60,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+import dj_database_url
+import os
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default="postgresql://auth_user_bjqn_user:AYAdsp5FaaD1Im95qdctOLQKr06oiNPH@dpg-d35s1ifdiees738j3vgg-a/auth_user_bjqn",
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
+
+
 
 ROOT_URLCONF = 'campustrack.urls'
 
